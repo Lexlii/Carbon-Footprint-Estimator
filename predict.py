@@ -2,10 +2,6 @@ import pickle
 from pathlib import Path
 import uvicorn
 from fastapi import FastAPI
-import pickle
-from pathlib import Path
-import uvicorn
-from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Union, Dict, Any
 import pandas as pd
@@ -103,7 +99,7 @@ def _normalize_list_field(value: Union[List[str], str]) -> str:
     return str(value)
 
 
-# Load artifacts at module import (no try/except per instruction). Missing files will raise.
+# Load artifacts at module import. Missing files will raise.
 model = _load_model(MODEL_PATH)
 dv = _build_or_load_dv(DV_PATH, CSV_PATH)
 
@@ -136,7 +132,6 @@ def predict(payload: InputData):
     X = dv.transform([record])
     pred = model.predict(X)
 
-    # extract scalar prediction
     if hasattr(pred, '__len__'):
         value = float(pred[0])
     else:
@@ -146,4 +141,4 @@ def predict(payload: InputData):
 
 
 if __name__ == "__main__":
-    uvicorn.run("predict:app", host="0.0.0.0", port=8080)
+    uvicorn.run("predict:app", host="0.0.0.0", port=9696)
