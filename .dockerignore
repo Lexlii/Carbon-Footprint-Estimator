@@ -1,0 +1,50 @@
+# Ignore VCS and local environment
+.git
+.git/**
+.env
+.env.*
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.eggs/
+*.whl
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Notebooks and large data
+*.ipynb
+*.csv
+data/
+notebooks/
+
+# Tests & CI
+.pytest_cache/
+.coverage
+.tox/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docs, CI and other non-runtime files
+docs/
+.github/
+
+# Node / build
+dist/
+build/
+
+# Ignore editor folders
+.vscode/
+.idea/
+
+# Keep model and dv files but ensure large data is excluded by pattern above
+# xg_model.pkl
+# dv.pkl
