@@ -14,11 +14,6 @@ COPY "predict.py" "xg_model.pkl" "dv.pkl" "app.py" "start.sh" ./
 
 RUN chmod +x start.sh
 
-RUN find /app/.venv -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true && \
-    find /app/.venv -type d -name "*.dist-info" -exec rm -rf {} + 2>/dev/null || true && \
-    find /app/.venv -type f -name "*.pyc" -delete && \
-    find /app/.venv -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-
 EXPOSE 9696
 EXPOSE 8501
 
