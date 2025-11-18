@@ -217,3 +217,119 @@ The `start.sh` script is the Docker entrypoint that:
 - **Update lock file locally**: Run `uv sync` to regenerate `uv.lock` with dev dependencies
 
 ---
+
+## 📡 API Documentation
+
+### Endpoint: `POST /predict`
+
+**Base URL (Local):** `http://localhost:9696`  
+**Base URL (Production):** `https://carbon-footprint-estimator-fcjc.onrender.com`
+
+**Description:** Accepts user lifestyle data and returns predicted annual carbon emissions in kg CO₂e.
+
+#### Request Body
+
+```json
+{
+  "body_type": "overweight",
+  "sex": "female",
+  "diet": "pescatarian",
+  "shower": "daily",
+  "heating": "coal",
+  "transport": "public",
+  "vehicle_type": "None",
+  "social_activity": "often",
+  "monthly_grocery_bill": 230,
+  "flight": "frequently",
+  "vehicle_distance": 210,
+  "waste_bag_size": "large",
+  "waste_weekly": 4,
+  "tv_daily_hour": 7,
+  "clothes_monthly": 26,
+  "internet_daily": 1,
+  "energy_efficiency": "No",
+  "recycling": ["Metal"],
+  "cooking": ["Stove", "Oven"]
+}
+```
+
+#### Field Descriptions
+
+| Field | Type | Options | Description |
+|-------|------|---------|-------------|
+| `body_type` | string | underweight, normal, overweight, obese | User's body classification |
+| `sex` | string | male, female, other | User's sex |
+| `diet` | string | vegan, vegetarian, pescatarian, omnivore | Diet type |
+| `shower` | string | rarely, weekly, daily | Shower frequency |
+| `heating` | string | coal, gas, electric, renewable, none | Primary heating source |
+| `transport` | string | public, private, walking, cycling | Primary transport mode |
+| `vehicle_type` | string | None, electric, hybrid, gasoline, diesel | Vehicle type |
+| `social_activity` | string | rarely, sometimes, often | Social activity frequency |
+| `monthly_grocery_bill` | float | 0 - ∞ | Monthly grocery spending ($) |
+| `flight` | string | never, occasionally, frequently | Flight frequency |
+| `vehicle_distance` | float | 0 - ∞ | Weekly driving distance (km) |
+| `waste_bag_size` | string | small, medium, large | Typical waste bag size |
+| `waste_weekly` | integer | 0 - ∞ | Weekly waste bags count |
+| `tv_daily_hour` | float | 0 - 24 | Daily TV/screen time (hours) |
+| `clothes_monthly` | integer | 0 - ∞ | Monthly clothing purchases (items) |
+| `internet_daily` | float | 0 - 24 | Daily internet usage (hours) |
+| `energy_efficiency` | string | Yes, No | Energy-efficient home/appliances |
+| `recycling` | array | Metal, Plastic, Paper, Glass, None | Items recycled |
+| `cooking` | array | Stove, Oven, Microwave, Grill, None | Cooking methods |
+
+#### Response (Success - 200)
+
+```json
+{
+  "prediction": 5234.67,
+  "input": {
+    "body_type": "overweight",
+    "sex": "female",
+    ...
+  }
+}
+```
+
+#### Response (Validation Error - 422)
+
+```json
+{
+  "detail": [
+    {
+      "loc": ["body", "monthly_grocery_bill"],
+      "msg": "value must be >= 0",
+      "type": "value_error.number.not_ge"
+    }
+  ]
+}
+```
+
+#### Example cURL Request
+
+```bash
+curl -X POST http://localhost:9696/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "body_type": "normal",
+    "sex": "male",
+    "diet": "omnivore",
+    "shower": "daily",
+    "heating": "gas",
+    "transport": "private",
+    "vehicle_type": "gasoline",
+    "social_activity": "sometimes",
+    "monthly_grocery_bill": 250,
+    "flight": "occasionally",
+    "vehicle_distance": 150,
+    "waste_bag_size": "medium",
+    "waste_weekly": 2,
+    "tv_daily_hour": 2,
+    "clothes_monthly": 10,
+    "internet_daily": 5,
+    "energy_efficiency": "No",
+    "recycling": ["Paper", "Plastic"],
+    "cooking": ["Stove"]
+  }'
+```
+
+---
