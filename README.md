@@ -434,3 +434,105 @@ FastAPI app ready to receive requests
 ```
 
 ---
+
+## ❓ Troubleshooting
+
+### Issue 1: "Cannot connect to backend service"
+**Cause:** FastAPI backend is not running.
+**Solution:**
+```bash
+# Verify backend is running on correct port
+python predict.py
+# Or explicitly specify:
+python -m uvicorn predict:app --host 0.0.0.0 --port 9696
+```
+
+### Issue 2: "Model file not found at: xg_model.pkl"
+**Cause:** The trained model pickle file is missing.
+**Solution:**
+- Ensure `xg_model.pkl` exists in the project root
+- If missing, run the training notebook: `notebook.ipynb` to regenerate it
+
+### Issue 3: "CSV file for rebuilding DictVectorizer not found"
+**Cause:** `Carbon Emission.csv` is missing from the project root.
+**Solution:**
+- Ensure `Carbon Emission.csv` exists in the project root
+- It's needed for DictVectorizer initialization
+
+### Issue 4: Request times out after 10 seconds
+**Cause:** Backend is slow or overloaded.
+**Solution:**
+- Reduce backend load (close other applications)
+- Restart the backend server
+- Increase timeout in `app.py` by changing `REQUEST_TIMEOUT = 10` to a higher value
+
+### Issue 5: "Port 9696 already in use"
+**Cause:** Another process is using port 9696.
+**Solution:**
+```bash
+# Windows: Find and kill process using port 9696
+netstat -ano | findstr :9696
+taskkill /PID <PID> /F
+
+# Or use a different port
+python -m uvicorn predict:app --host 0.0.0.0 --port 9697
+# Then update app.py: BACKEND_URL = "http://localhost:9697/predict"
+```
+
+### Issue 6: "Port 8501 already in use" (Streamlit)
+**Cause:** Streamlit is already running or port is occupied.
+**Solution:**
+```bash
+streamlit run app.py --server.port 8502
+```
+
+### Issue 7: Validation error "Invalid input format"
+**Cause:** One or more input fields contain invalid values.
+**Solution:**
+- Ensure numeric fields are valid numbers
+- Check that dropdown selections match available options
+- Ensure grocery bill, distance, hours, and count are >= 0
+
+---
+
+## 📊 Model Information
+
+- **Algorithm:** XGBoost Regressor
+- **Target Variable:** Annual carbon emission (kg CO₂e)
+- **Features:** 19 lifestyle and activity features
+- **Training Data:** Carbon Emission.csv dataset
+- **Feature Engineering:** DictVectorizer for categorical/numerical encoding
+- **Preprocessing:** Automatic column normalization and missing value handling
+
+---
+
+## 🔒 Security Notes
+
+- The frontend communicates with the backend via HTTP (not HTTPS). For production, use HTTPS/TLS.
+- No authentication is implemented. For production, add API authentication (API keys, OAuth, etc.).
+- Input validation is performed on both frontend and backend.
+
+---
+
+## 📝 License
+
+This project is part of the Carbon-Footprint-Estimator repository by Lexlii.
+
+---
+
+## 🤝 Contributing
+
+Feel free to submit issues and enhancement requests!
+
+---
+
+## 📞 Support
+
+For issues or questions:
+1. Check the **Troubleshooting** section above
+2. Verify all files are in the correct location
+3. Ensure all dependencies are installed: `uv sync`
+4. Check backend logs for detailed error messages
+
+---
+
