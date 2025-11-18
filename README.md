@@ -189,3 +189,31 @@ The container automatically executes `start.sh` as the entrypoint, which runs bo
 Open your browser to `http://localhost:8501` to access the frontend.
 
 ---
+
+## 🐳 Docker Deployment Details
+
+### Overview
+
+The `Dockerfile` uses a **multi-stage build** strategy to minimize image size while keeping both services (backend & frontend) in a single container.
+
+**Optimized for Production:**
+- **Multi-stage build**: Separates build dependencies from runtime
+- **Slim base image**: `python:3.12.1-slim-bookworm` (reduced size)
+- **Image size**: ~600-800 MB (reduced from 2.17 GB with dev dependencies removed)
+- **Virtual environment caching**: Compiled dependencies copied from builder stage
+- **Minimal cleanup**: Removes `.pyc` files, test directories, and cache to save space
+- **Single entrypoint**: `start.sh` runs both FastAPI and Streamlit simultaneously
+
+### How `start.sh` Works
+
+The `start.sh` script is the Docker entrypoint that:
+1. Starts the FastAPI backend on port 9696 in the background
+2. Starts the Streamlit frontend on port 8501 in the foreground
+3. Allows both services to run within a single container
+
+**Development vs. Production:**
+- **Production**: Only runtime dependencies (fastapi, streamlit, scikit-learn, xgboost, etc.)
+- **Development**: Uncomment `matplotlib`, `plotly`, `seaborn`, `ipykernel` in `pyproject.toml` for local work
+- **Update lock file locally**: Run `uv sync` to regenerate `uv.lock` with dev dependencies
+
+---
