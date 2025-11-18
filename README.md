@@ -111,3 +111,81 @@ Ensure the following files are present in the project root:
 
 ---
 
+## 🚀 Running the Application
+
+### Method 1: Run Backend and Frontend Separately (Recommended for Development)
+
+#### Terminal 1: Start the FastAPI Backend
+
+```bash
+cd c:\\Users\\{your-dirctory}\\Carbon-Footprint-Estimator
+python predict.py
+```
+
+Or using uvicorn directly:
+```bash
+python -m uvicorn predict:app --host 0.0.0.0 --port 9696 --reload
+```
+
+**Expected Output:**
+```
+INFO:     Uvicorn running on http://0.0.0.0:9696
+INFO:     Application startup complete
+```
+
+#### Terminal 2: Start the Streamlit Frontend
+
+```bash
+cd c:\\Users\\{your-directory}\\Carbon-Footprint-Estimator
+streamlit run app.py
+```
+
+**Expected Output:**
+```
+  You can now view your Streamlit app in your browser.
+  Local URL: http://localhost:8501
+```
+
+Open your browser to `http://localhost:8501` to use the application.
+
+---
+
+### Method 2: Run Both Services Together Using `start.sh` (Development & Production)
+
+The `start.sh` script automatically starts both the FastAPI backend and Streamlit frontend in the same process.
+
+#### On Linux/macOS:
+```bash
+./start.sh
+```
+
+#### On Windows (Git Bash or WSL):
+```bash
+bash start.sh
+```
+
+**What `start.sh` does:**
+1. Starts FastAPI backend on `http://0.0.0.0:9696` in the background
+2. Starts Streamlit frontend on `http://0.0.0.0:8501` in the foreground
+
+Access the app at `http://localhost:8501`.
+
+---
+
+### Method 3: Using Docker (Production)
+
+#### Build the Docker Image
+```bash
+docker build -t carbon-estimator:latest .
+```
+
+#### Run the Container Locally
+```bash
+docker run --rm -p 9696:9696 -p 8501:8501 carbon-estimator:latest
+```
+
+The container automatically executes `start.sh` as the entrypoint, which runs both services simultaneously.
+
+Open your browser to `http://localhost:8501` to access the frontend.
+
+---
