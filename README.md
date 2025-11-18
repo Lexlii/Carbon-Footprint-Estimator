@@ -73,7 +73,7 @@ Carbon-Footprint-Estimator/
 
 ### Step 1: Clone or Navigate to Repository
 ```bash
-cd c:\\Users\\{your-directory}\\Carbon-Footprint-Estimator
+cd c:\Users\{your-directory}\Carbon-Footprint-Estimator
 ```
 
 ### Step 2: Install Dependencies
@@ -118,7 +118,7 @@ Ensure the following files are present in the project root:
 #### Terminal 1: Start the FastAPI Backend
 
 ```bash
-cd c:\\Users\\{your-dirctory}\\Carbon-Footprint-Estimator
+cd c:\Users\{your-dirctory}\Carbon-Footprint-Estimator
 python predict.py
 ```
 
@@ -136,7 +136,7 @@ INFO:     Application startup complete
 #### Terminal 2: Start the Streamlit Frontend
 
 ```bash
-cd c:\\Users\\{your-directory}\\Carbon-Footprint-Estimator
+cd c:\Users\{your-directory}\Carbon-Footprint-Estimator
 streamlit run app.py
 ```
 
