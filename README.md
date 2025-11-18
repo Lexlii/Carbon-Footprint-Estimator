@@ -333,3 +333,104 @@ curl -X POST http://localhost:9696/predict \
 ```
 
 ---
+
+## 🎨 Using the Frontend
+
+### Home Page Features
+
+1. **Personal Information Section**
+   - Select body type (underweight, normal, overweight, obese)
+   - Choose sex
+   - Input age (optional)
+
+2. **Diet & Food Section**
+   - Select diet type (vegan, vegetarian, pescatarian, omnivore)
+   - Enter monthly grocery bill
+
+3. **Daily Habits Section**
+   - Set shower frequency
+   - Input daily TV/screen time
+   - Enter daily internet usage
+
+4. **Transportation Section**
+   - Choose primary transport method
+   - Select vehicle type
+   - Enter weekly vehicle distance
+
+5. **Energy & Utilities Section**
+   - Select heating source
+   - Indicate energy efficiency
+
+6. **Consumption & Waste Section**
+   - Enter monthly clothing purchases
+   - Select waste bag size
+   - Input weekly waste bag count
+   - Select items you recycle
+
+7. **Cooking & Lifestyle Section**
+   - Select cooking methods
+   - Choose social activity level
+   - Select flight frequency
+
+### Prediction Flow
+
+1. **Fill in all fields** on the left panel
+2. **Click "🚀 Predict Carbon Emission"** button on the right panel
+3. **View results** including:
+   - Annual carbon emission in kg CO₂e
+   - Emission assessment (Sustainable/Average/High/Very High)
+   - Comparison chart vs. typical ranges
+   - Emission breakdown by category
+   - Personalized tips to reduce footprint
+4. **Previous prediction** is stored in session for reference
+
+### Interpretation Guide
+
+- **< 2,000 kg CO₂e/year**: 🟢 Sustainable - Excellent! Below average emissions
+- **2,000 - 5,000 kg CO₂e/year**: 🟡 Average - On par with typical consumer
+- **5,000 - 8,000 kg CO₂e/year**: 🟠 High - Consider making changes
+- **> 8,000 kg CO₂e/year**: 🔴 Very High - Significant reduction opportunities
+
+---
+
+## 🏗️ System Architecture
+
+### Backend Flow
+
+```
+User Input (Streamlit)
+    ↓
+HTTP POST Request to /predict
+    ↓
+FastAPI validates InputData (Pydantic)
+    ↓
+_prepare_record() normalizes inputs
+    ↓
+DictVectorizer transforms record → sparse matrix
+    ↓
+XGBoost model predicts carbon emission
+    ↓
+JSON Response with prediction value
+    ↓
+Streamlit displays result + visualizations
+```
+
+### Data Flow for Backend Startup
+
+```
+predict.py starts
+    ↓
+Load xg_model.pkl (trained XGBoost)
+    ↓
+Check for dv.pkl cache
+    ├─ If exists: Load cached DictVectorizer
+    └─ If not exists:
+        ├─ Read Carbon Emission.csv
+        ├─ Normalize column names
+        ├─ Fit DictVectorizer on features
+        └─ Save dv.pkl for future runs
+    ↓
+FastAPI app ready to receive requests
+```
+
+---
