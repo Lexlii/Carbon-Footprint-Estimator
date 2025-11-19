@@ -2,6 +2,20 @@
 
 A comprehensive system for predicting personal carbon emissions based on lifestyle choices. The system consists of a **FastAPI backend** that uses a trained XGBoost model and a **Streamlit frontend** for an interactive user experience.
 
+## ❗ Problem Statement
+
+Individuals and small organizations often lack easy, quick tools to estimate their personal or operational carbon emissions from daily activities. Calculating a reasonable annual carbon footprint requires combining many lifestyle and consumption factors (transportation, diet, energy use, flights, shopping, waste), which is time-consuming and error-prone when done manually. Businesses and developers who want to include carbon estimates in apps or dashboards also need a lightweight, programmatic API that can provide consistent predictions.
+
+This project provides a compact, deployable solution: a REST API that accepts a small, structured payload describing a user's lifestyle and returns an annual carbon emission estimate (kg CO₂e). A Streamlit frontend lets non-technical users interactively input values and see results. The system is suitable for local development, containerized deployment (Docker), and cloud platforms such as Render.
+
+## 🎯 How the Solution Is Used
+
+- Purpose: give users and services a fast, repeatable estimate of annual carbon emissions based on common lifestyle inputs.
+- Users: individuals, educators, sustainability teams, or developers embedding a prediction API in an app.
+- Inputs: a JSON payload (or a Streamlit form) with ~19 fields (transport, diet, heating, flights, grocery spend, etc.).
+- Output: a single numerical estimate (kg CO₂e per year) and contextual assessment (sustainable / average / high / very high).
+- Deployment modes: local development (run backend + frontend separately), single-container deployment using `start.sh` (both services in one container), or cloud deployment (Render/Docker registry).
+
 ## 🚀 Live Deployment
 
 **Try the app now:** https://carbon-footprint-estimator-fcjc.onrender.com
